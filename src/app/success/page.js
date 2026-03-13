@@ -12,8 +12,9 @@ function SuccessScreen() {
 
     useEffect(() => {
         if (id) {
-            // In production, this should be the absolute URL
-            const contactUrl = `${window.location.origin}/v/${id}`;
+            // In production, force the base URL via env variable if available
+            const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || window.location.origin;
+            const contactUrl = `${baseUrl}/v/${id}`;
             QRCode.toDataURL(contactUrl, {
                 width: 300,
                 margin: 2,
