@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server';
 import connectDB from '@/lib/db';
 import Vehicle from '@/lib/models/Vehicle';
+import Activity from '@/lib/models/Activity';
+
+export const dynamic = 'force-dynamic';
 
 export async function GET(request, { params }) {
     try {
@@ -17,6 +20,12 @@ export async function GET(request, { params }) {
         if (!vehicle) {
             return NextResponse.json({ error: 'Vehicle not found' }, { status: 404 });
         }
+
+        await Activity.create({
+            type: 'SCANNED',
+            vehicleId: vehicle.vehicleId,
+            message: `QR Scanned for ${vehicle.vehicleNumber}`,
+        });
 
         return NextResponse.json({
             success: true,

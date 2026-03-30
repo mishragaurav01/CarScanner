@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import connectDB from '@/lib/db';
 import Vehicle from '@/lib/models/Vehicle';
+import Activity from '@/lib/models/Activity';
 import { nanoid } from 'nanoid';
 
 export async function POST(request) {
@@ -20,6 +21,12 @@ export async function POST(request) {
             ownerName,
             phone,
             vehicleNumber,
+        });
+
+        await Activity.create({
+            type: 'CREATED',
+            vehicleId: newVehicle.vehicleId,
+            message: `New vehicle registered (${vehicleNumber})`,
         });
 
         return NextResponse.json({ success: true, vehicleId: newVehicle.vehicleId });
